@@ -22,6 +22,7 @@ public class homeInventory {
 
         Inventory inventory = Bukkit.getServer().createInventory(null, 9, newPlayerName + "'s Homes " + ChatColor.GREEN + "[Teleport]");
         int count = 0;
+
         if (mainClass.getInstance().homeConfig.contains(player.getUniqueId().toString())) {
             Set<String> homeList = mainClass.getInstance().homeConfig.getConfigurationSection(player.getUniqueId().toString()).getKeys(false);
 
@@ -44,7 +45,10 @@ public class homeInventory {
                 String iconName = mainClass.getInstance().homeConfig.getString(player.getUniqueId().toString() + "." + homes + "." + "icon");
                 ItemStack homeItem = new ItemStack(Material.getMaterial(iconName));
                 ItemMeta homeItemMeta = homeItem.getItemMeta();
-                homeItemMeta.setDisplayName(String.valueOf(homes));
+                if (homeItemMeta != null)
+                    homeItemMeta.setDisplayName(String.valueOf(homes));
+                else
+                    Bukkit.getLogger().severe("[HomeWarpGUI]: Error while creating home items in home teleport inventory.");
                 homeItem.setItemMeta(homeItemMeta);
                 inventory.setItem(count, homeItem);
                 count++;
@@ -52,25 +56,37 @@ public class homeInventory {
 
             ItemStack setHomeItem = new ItemStack(Material.GREEN_WOOL);
             ItemMeta setHomeItemMeta = setHomeItem.getItemMeta();
-            setHomeItemMeta.setDisplayName("Set Home");
+            if (setHomeItemMeta != null)
+                setHomeItemMeta.setDisplayName("Set Home");
+            else
+                Bukkit.getLogger().severe("[HomeWarpGUI]: Error while creating set home item in home teleport inventory.");
             setHomeItem.setItemMeta(setHomeItemMeta);
             inventory.setItem(size - 2, setHomeItem);
 
             ItemStack delHomeItem = new ItemStack(Material.RED_WOOL);
             ItemMeta delHomeItemMeta = delHomeItem.getItemMeta();
-            delHomeItemMeta.setDisplayName("Delete Home");
+            if (delHomeItemMeta != null)
+                delHomeItemMeta.setDisplayName("Delete Home");
+            else
+                Bukkit.getLogger().severe("[HomeWarpGUI]: Error while creating delete home item in home teleport inventory.");
             delHomeItem.setItemMeta(delHomeItemMeta);
             inventory.setItem(size - 1, delHomeItem);
         } else {
             ItemStack setHomeItem = new ItemStack(Material.GREEN_WOOL);
             ItemMeta setHomeItemMeta = setHomeItem.getItemMeta();
-            setHomeItemMeta.setDisplayName("Set Home");
+            if (setHomeItemMeta != null)
+                setHomeItemMeta.setDisplayName("Set Home");
+            else
+                Bukkit.getLogger().severe("[HomeWarpGUI]: Error while creating set home item in home teleport inventory.");
             setHomeItem.setItemMeta(setHomeItemMeta);
             inventory.setItem(7, setHomeItem);
 
             ItemStack delHomeItem = new ItemStack(Material.RED_WOOL);
             ItemMeta delHomeItemMeta = delHomeItem.getItemMeta();
-            delHomeItemMeta.setDisplayName("Delete Home");
+            if (delHomeItemMeta != null)
+                delHomeItemMeta.setDisplayName("Delete Home");
+            else
+                Bukkit.getLogger().severe("[HomeWarpGUI]: Error while creating delete home item in home teleport inventory.");
             delHomeItem.setItemMeta(delHomeItemMeta);
             inventory.setItem(8, delHomeItem);
         }
@@ -108,7 +124,10 @@ public class homeInventory {
                 String iconName = mainClass.getInstance().homeConfig.getString(player.getUniqueId().toString() + "." + homeName + "." + "icon");
                 ItemStack homeItem = new ItemStack(Material.getMaterial(iconName));
                 ItemMeta homeItemMeta = homeItem.getItemMeta();
-                homeItemMeta.setDisplayName(String.valueOf(homeName));
+                if (homeItemMeta != null)
+                    homeItemMeta.setDisplayName(String.valueOf(homeName));
+                else
+                    Bukkit.getLogger().severe("[HomeWarpGUI]: Error while creating home items in delete home inventory.");
                 homeItem.setItemMeta(homeItemMeta);
                 inventory.setItem(count, homeItem);
                 count++;
@@ -116,13 +135,19 @@ public class homeInventory {
 
             ItemStack delHomeItem = new ItemStack(Material.RED_WOOL);
             ItemMeta delHomeItemMeta = delHomeItem.getItemMeta();
-            delHomeItemMeta.setDisplayName("Back");
+            if (delHomeItemMeta != null)
+                delHomeItemMeta.setDisplayName("Back");
+            else
+                Bukkit.getLogger().severe("[HomeWarpGUI]: Error while creating back item in delete home inventory.");
             delHomeItem.setItemMeta(delHomeItemMeta);
             inventory.setItem(size - 1, delHomeItem);
         } else {
             ItemStack delHomeItem = new ItemStack(Material.RED_WOOL);
             ItemMeta delHomeItemMeta = delHomeItem.getItemMeta();
-            delHomeItemMeta.setDisplayName("Back");
+            if (delHomeItemMeta != null)
+                delHomeItemMeta.setDisplayName("Back");
+            else
+                Bukkit.getLogger().severe("[HomeWarpGUI]: Error while creating back item in delete home inventory.");
             delHomeItem.setItemMeta(delHomeItemMeta);
             inventory.setItem(8, delHomeItem);
         }
@@ -134,6 +159,10 @@ public class homeInventory {
         for (int i = 0; i < blocks.length; i++) {
             ItemStack iconItem = new ItemStack(blocks[i]);
             ItemMeta iconItemMeta = iconItem.getItemMeta();
+            if (iconItemMeta != null)
+                iconItemMeta.setDisplayName("Back");
+            else
+                Bukkit.getLogger().severe("[HomeWarpGUI]: Error while creating set home icon inventory.");
             iconItemMeta.setDisplayName(homeName);
             iconItem.setItemMeta(iconItemMeta);
             inventory.setItem(i, iconItem);

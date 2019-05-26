@@ -3,26 +3,27 @@ package com.jakevalenzuela.homewarpgui.listeners;
 import com.jakevalenzuela.homewarpgui.inventories.homeInventory;
 import com.jakevalenzuela.homewarpgui.inventories.warpInventory;
 import com.jakevalenzuela.homewarpgui.mainClass;
+import com.jakevalenzuela.homewarpgui.utilities.homeUtil;
+import com.jakevalenzuela.homewarpgui.utilities.warpUtil;
 import net.wesjd.anvilgui.AnvilGUI;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
-import org.bukkit.Location;
-import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
-import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.inventory.Inventory;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Set;
 
 public class playerListener implements Listener {
 
-    homeInventory homes = new homeInventory();
-    warpInventory warps = new warpInventory();
+    private homeInventory homes = new homeInventory();
+    private warpInventory warps = new warpInventory();
+
+    private homeUtil utilHome = new homeUtil();
+    private warpUtil utilWarp = new warpUtil();
 
     @EventHandler
     public void onInventoryClick(InventoryClickEvent event) {
@@ -42,8 +43,8 @@ public class playerListener implements Listener {
         }
 
         int warpCount = 0;
-        if (mainClass.getInstance().warpConfig.contains("warps.")) {
-            warpCount = mainClass.getInstance().warpConfig.getConfigurationSection("warps.").getKeys(false).size();
+        if (mainClass.getInstance().warpConfig.contains("warps")) {
+            warpCount = mainClass.getInstance().warpConfig.getConfigurationSection("warps").getKeys(false).size();
         }
 
         if (event.getView().getTitle().equals(cutPlayerName + "'s Homes " + ChatColor.GREEN + "[Teleport]")) {
@@ -63,18 +64,8 @@ public class playerListener implements Listener {
                     player.openInventory(homes.deleteHomeInventory(player));
 
                 } else if (slotNum >= 0 && slotNum <= homeCount && inventory.getItem(slotNum) != null) {
-                    String homeName = inventory.getItem(slotNum).getItemMeta().getDisplayName();
-                    double x = mainClass.getInstance().homeConfig.getInt(player.getUniqueId() + "." + homeName + "." + "x") + 0.5D;
-                    double y = mainClass.getInstance().homeConfig.getInt(player.getUniqueId() + "." + homeName + "." + "y");
-                    double z = mainClass.getInstance().homeConfig.getInt(player.getUniqueId() + "." + homeName + "." + "z") + 0.5D;
-                    float pitch = mainClass.getInstance().homeConfig.getInt(player.getUniqueId() + "." + homeName + "." + "pitch");
-                    float yaw = mainClass.getInstance().homeConfig.getInt(player.getUniqueId() + "." + homeName + "." + "yaw");
-                    String worldName = mainClass.getInstance().homeConfig.getString(player.getUniqueId() + "." + homeName + "." + "world");
-                    World world = Bukkit.getWorld(worldName);
-                    final Location location = new Location(world, x, y, z, yaw, pitch);
-
-                    player.teleport(location);
-                    player.sendMessage(ChatColor.GREEN + "You have arrived at '" + homeName + "'!");
+                    player.teleport(utilHome.getHome(player, inventory.getItem(slotNum).getItemMeta().getDisplayName()));
+                    player.sendMessage(ChatColor.GREEN + "You have arrived at '" + inventory.getItem(slotNum).getItemMeta().getDisplayName() + "'!");
                 }
             }
 
@@ -93,8 +84,8 @@ public class playerListener implements Listener {
                     }
 
                     if (mainClass.getInstance().homeConfig.contains(player.getUniqueId().toString())) {
-                        Set<String> homelist = mainClass.getInstance().homeConfig.getConfigurationSection(player.getUniqueId().toString()).getKeys(false);
-                        if (homelist.size() == 0) {
+                        Set<String> homeList = mainClass.getInstance().homeConfig.getConfigurationSection(player.getUniqueId().toString()).getKeys(false);
+                        if (homeList.size() == 0) {
                             mainClass.getInstance().homeConfig.set(player.getUniqueId().toString(), null);
                         }
                     }
@@ -103,7 +94,7 @@ public class playerListener implements Listener {
                 player.openInventory(homes.deleteHomeInventory(player));
             }
 
-        } else if (event.getView().getTitle().equals("Select a Home Icon") && slotNum >= 0 && slotNum < 27) {
+        } else if (event.getView().getTitle().equals("Select a Home Icon") && slotNum >= 0 && slotNum < 27) { /* Home Set Icon Inventory Listener */
             event.setCancelled(true);
             player.closeInventory();
             player.updateInventory();
@@ -124,28 +115,17 @@ public class playerListener implements Listener {
                 }
 
                 if (homelist.size() < homeLimit) {
-                    mainClass.getInstance().homeConfig.set(player.getUniqueId() + "." + homeName + "." + "icon", inventory.getItem(slotNum).getType().name());
-                    mainClass.getInstance().homeConfig.set(player.getUniqueId() + "." + homeName + "." + "world", player.getWorld().getName());
-                    mainClass.getInstance().homeConfig.set(player.getUniqueId() + "." + homeName + "." + "x", player.getLocation().getBlockX());
-                    mainClass.getInstance().homeConfig.set(player.getUniqueId() + "." + homeName + "." + "y", player.getLocation().getBlockY());
-                    mainClass.getInstance().homeConfig.set(player.getUniqueId() + "." + homeName + "." + "z", player.getLocation().getBlockZ());
-                    mainClass.getInstance().homeConfig.set(player.getUniqueId() + "." + homeName + "." + "pitch", player.getLocation().getPitch());
-                    mainClass.getInstance().homeConfig.set(player.getUniqueId() + "." + homeName + "." + "yaw", player.getLocation().getYaw());
+                    utilHome.setHome(player, homeName, inventory.getItem(slotNum).getType().name()); /* Create Home */
                     player.sendMessage(ChatColor.GREEN + "Home '" + homeName + "' Created!");
                 } else {
-                    player.sendMessage(ChatColor.RED + "You have reached your allowed maximum of houses!");
+                    player.sendMessage(ChatColor.RED + "You have reached your allowed maximum of houses!"); /* Player has reached max amount of houses (set through permissions) */
                 }
             } else {
-                mainClass.getInstance().homeConfig.set(player.getUniqueId() + "." + homeName + "." + "icon", inventory.getItem(slotNum).getType().name());
-                mainClass.getInstance().homeConfig.set(player.getUniqueId() + "." + homeName + "." + "world", player.getWorld().getName());
-                mainClass.getInstance().homeConfig.set(player.getUniqueId() + "." + homeName + "." + "x", player.getLocation().getBlockX());
-                mainClass.getInstance().homeConfig.set(player.getUniqueId() + "." + homeName + "." + "y", player.getLocation().getBlockY());
-                mainClass.getInstance().homeConfig.set(player.getUniqueId() + "." + homeName + "." + "z", player.getLocation().getBlockZ());
-                mainClass.getInstance().homeConfig.set(player.getUniqueId() + "." + homeName + "." + "pitch", player.getLocation().getPitch());
-                mainClass.getInstance().homeConfig.set(player.getUniqueId() + "." + homeName + "." + "yaw", player.getLocation().getYaw());
+                utilHome.setHome(player, homeName, inventory.getItem(slotNum).getType().name()); /* Create Home */
                 player.sendMessage(ChatColor.GREEN + "Home '" + homeName + "' Created!");
             }
-        } else if (event.getView().getTitle().equals("Warps " + ChatColor.GREEN + "[Teleport]")) { /* warp creation/teleport menu listener */
+
+        } else if (event.getView().getTitle().equals("Warps " + ChatColor.GREEN + "[Teleport]")) { /* Warp Teleport/Create Inventory Listener */
             event.setCancelled(true);
 
             if (slotNum < inventory.getSize()) {
@@ -161,26 +141,17 @@ public class playerListener implements Listener {
                     player.openInventory(warps.deleteWarpInventory(player));
 
                 } else if (slotNum >= 0 && slotNum <= warpCount && inventory.getItem(slotNum) != null) {
-                    String warpName = inventory.getItem(slotNum).getItemMeta().getDisplayName();
-                    double x = mainClass.getInstance().warpConfig.getInt("warps." + warpName + "." + "x") + 0.5D;
-                    double y = mainClass.getInstance().warpConfig.getInt("warps." + warpName + "." + "y");
-                    double z = mainClass.getInstance().warpConfig.getInt("warps." + warpName + "." + "z") + 0.5D;
-                    float pitch = mainClass.getInstance().warpConfig.getInt("warps." + warpName + "." + "pitch");
-                    float yaw = mainClass.getInstance().warpConfig.getInt("warps." + warpName + "." + "yaw");
-                    String worldName = mainClass.getInstance().warpConfig.getString("warps." + warpName + "." + "world");
-                    World world = Bukkit.getWorld(worldName);
-                    final Location location = new Location(world, x, y, z, yaw, pitch);
-
-                    player.teleport(location);
-                    player.sendMessage(ChatColor.GREEN + "You have arrived at '" + warpName + "'!");
+                    player.teleport(utilWarp.getWarp(player, inventory.getItem(slotNum).getItemMeta().getDisplayName()));
+                    player.sendMessage(ChatColor.GREEN + "You have arrived at '" + inventory.getItem(slotNum).getItemMeta().getDisplayName() + "'!");
                 }
             }
+
         } else if (event.getView().getTitle().equals("Warps " + ChatColor.RED + "[Delete]")) {
             event.setCancelled(true);
 
             if (slotNum == inventory.getSize() - 1) {
                 player.openInventory(warps.createWarpInventory(player));
-            } else if ((slotNum >= 0) && (slotNum <= warpCount)) {
+            } else if (slotNum >= 0 && slotNum <= warpCount) {
                 if (inventory.getItem(slotNum) != null) {
 
                     String warpName = inventory.getItem(slotNum).getItemMeta().getDisplayName();
@@ -204,22 +175,15 @@ public class playerListener implements Listener {
             player.closeInventory();
             player.updateInventory();
 
-            String warpName = inventory.getItem(slotNum).getItemMeta().getDisplayName();
-            mainClass.getInstance().warpConfig.set("warps." + warpName + "." + "icon", inventory.getItem(slotNum).getType().name());
-            mainClass.getInstance().warpConfig.set("warps." + warpName + "." + "world", player.getWorld().getName());
-            mainClass.getInstance().warpConfig.set("warps." + warpName + "." + "x", player.getLocation().getBlockX());
-            mainClass.getInstance().warpConfig.set("warps." + warpName + "." + "y", player.getLocation().getBlockY());
-            mainClass.getInstance().warpConfig.set("warps." + warpName + "." + "z", player.getLocation().getBlockZ());
-            mainClass.getInstance().warpConfig.set("warps." + warpName + "." + "pitch", player.getLocation().getPitch());
-            mainClass.getInstance().warpConfig.set("warps." + warpName + "." + "yaw", player.getLocation().getYaw());
-            player.sendMessage(ChatColor.GREEN + "Warp '" + warpName + "' Created!");
+            utilWarp.setWarp(player, inventory.getItem(slotNum).getItemMeta().getDisplayName(), inventory.getItem(slotNum).getType().toString());
+            player.sendMessage(ChatColor.GREEN + "Warp '" + inventory.getItem(slotNum).getItemMeta().getDisplayName() + "' Created!");
         }
 
         try {
             mainClass.getInstance().homeConfig.save(mainClass.getInstance().homeDataFile);
             mainClass.getInstance().warpConfig.save(mainClass.getInstance().warpDataFile);
         } catch (IOException e) {
-            e.printStackTrace();
+            Bukkit.getLogger().severe("[HomeWarpGUI]: Error while saving homeData.yml or warpData.yml files.");
         }
     }
 }

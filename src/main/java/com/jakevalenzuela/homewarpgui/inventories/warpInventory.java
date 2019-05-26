@@ -23,7 +23,7 @@ public class warpInventory {
             int rows = 1;
             if (warpList.size() > 7) {
                 for (int i = 0; i < warpList.size(); i++) {
-                    if (i + 2 % 9 == 0) {
+                    if ((i + 2) % 9 == 0) {
                         rows++;
                     }
                 }

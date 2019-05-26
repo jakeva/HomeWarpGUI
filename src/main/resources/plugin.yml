@@ -8,8 +8,8 @@ website: www.jakevalenzuela.com
 
 commands:
   home:
-    description: Opens the Home GUI
-    usage: /home
+    description: Opens Home GUI or Teleport to Home
+    usage: /home or /home <name>
   warp:
-    description: Opens the Warp GUI
-    usage: /warp
+    description: Opens Warp GUI or Teleport to Warp
+    usage: /warp or /warp <name>
