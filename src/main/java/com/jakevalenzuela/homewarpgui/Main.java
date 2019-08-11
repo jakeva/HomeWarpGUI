@@ -1,10 +1,10 @@
 package com.jakevalenzuela.homewarpgui;
 
-import com.jakevalenzuela.homewarpgui.inventories.homeInventory;
-import com.jakevalenzuela.homewarpgui.inventories.warpInventory;
-import com.jakevalenzuela.homewarpgui.listeners.playerListener;
-import com.jakevalenzuela.homewarpgui.utilities.homeUtil;
-import com.jakevalenzuela.homewarpgui.utilities.warpUtil;
+import com.jakevalenzuela.homewarpgui.inventories.HomeInventory;
+import com.jakevalenzuela.homewarpgui.inventories.WarpInventory;
+import com.jakevalenzuela.homewarpgui.listeners.PlayerListener;
+import com.jakevalenzuela.homewarpgui.utilities.HomeUtil;
+import com.jakevalenzuela.homewarpgui.utilities.WarpUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
@@ -17,29 +17,28 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Set;
 
-public final class mainClass extends JavaPlugin {
+public final class Main extends JavaPlugin {
 
+    private static Main instance;
     public File homeDataFile, warpDataFile;
     public YamlConfiguration homeConfig, warpConfig;
-    private static mainClass instance;
+    private HomeInventory homes = new HomeInventory();
+    private WarpInventory warps = new WarpInventory();
 
-    private homeInventory homes = new homeInventory();
-    private warpInventory warps = new warpInventory();
+    private HomeUtil utilHome = new HomeUtil();
+    private WarpUtil utilWarp = new WarpUtil();
 
-    private homeUtil utilHome = new homeUtil();
-    private warpUtil utilWarp = new warpUtil();
-
-    public mainClass() {
+    public Main() {
         instance = this;
     }
 
-    public static mainClass getInstance() {
+    public static Main getInstance() {
         return instance;
     }
 
     @Override
     public void onEnable() {
-        getServer().getPluginManager().registerEvents(new playerListener(), this);
+        getServer().getPluginManager().registerEvents(new PlayerListener(), this);
 
         if (!instance.getDataFolder().exists()) {
             instance.getDataFolder().mkdir();
@@ -95,7 +94,7 @@ public final class mainClass extends JavaPlugin {
 
             } else if (args.length >= 1) {
                 if (homeConfig.contains(player.getUniqueId().toString())) {
-                    Set<String> homeList = mainClass.getInstance().homeConfig.getConfigurationSection(player.getUniqueId().toString()).getKeys(false);
+                    Set<String> homeList = Main.getInstance().homeConfig.getConfigurationSection(player.getUniqueId().toString()).getKeys(false);
 
                     String homeName = "";
                     for (int i = 0; i < args.length; i++) {
@@ -120,7 +119,7 @@ public final class mainClass extends JavaPlugin {
 
             } else if (args.length >= 1) {
                 if (warpConfig.contains("warps")) {
-                    Set<String> warpList = mainClass.getInstance().warpConfig.getConfigurationSection("warps").getKeys(false);
+                    Set<String> warpList = Main.getInstance().warpConfig.getConfigurationSection("warps").getKeys(false);
 
                     String warpName = "";
                     for (int i = 0; i < args.length; i++) {

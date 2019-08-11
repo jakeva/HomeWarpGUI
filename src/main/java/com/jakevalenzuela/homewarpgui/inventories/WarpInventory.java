@@ -1,6 +1,6 @@
 package com.jakevalenzuela.homewarpgui.inventories;
 
-import com.jakevalenzuela.homewarpgui.mainClass;
+import com.jakevalenzuela.homewarpgui.Main;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -11,14 +11,44 @@ import org.bukkit.inventory.meta.ItemMeta;
 
 import java.util.Set;
 
-public class warpInventory {
+public class WarpInventory {
+
+    private Material[] blocks = {
+            Material.GLOWSTONE,
+            Material.MYCELIUM,
+            Material.FISHING_ROD,
+            Material.WATER_BUCKET,
+            Material.LAVA_BUCKET,
+            Material.SPRUCE_SIGN,
+            Material.ANVIL,
+            Material.MINECART,
+            Material.SAND,
+            Material.CHEST,
+            Material.CRAFTING_TABLE,
+            Material.ENCHANTING_TABLE,
+            Material.END_PORTAL_FRAME,
+            Material.JUKEBOX,
+            Material.BOOKSHELF,
+            Material.BEDROCK,
+            Material.STONE,
+            Material.ICE,
+            Material.GRASS_BLOCK,
+            Material.OAK_SAPLING,
+            Material.CACTUS,
+            Material.RED_MUSHROOM_BLOCK,
+            Material.WHEAT,
+            Material.OAK_LEAVES,
+            Material.RED_BED,
+            Material.POPPY,
+            Material.LILY_PAD
+    };
 
     public Inventory createWarpInventory(Player player) {
 
         Inventory inventory = Bukkit.getServer().createInventory(null, 9, "Warps " + ChatColor.GREEN + "[Teleport]");
         int count = 0;
-        if (mainClass.getInstance().warpConfig.contains("warps")) {
-            Set<String> warpList = mainClass.getInstance().warpConfig.getConfigurationSection("warps").getKeys(false);
+        if (Main.getInstance().warpConfig.contains("warps")) {
+            Set<String> warpList = Main.getInstance().warpConfig.getConfigurationSection("warps").getKeys(false);
 
             int rows = 1;
             if (warpList.size() > 7) {
@@ -36,7 +66,7 @@ public class warpInventory {
 
             inventory = Bukkit.getServer().createInventory(null, size, "Warps " + ChatColor.GREEN + "[Teleport]");
             for (String warps : warpList) {
-                String iconName = mainClass.getInstance().warpConfig.getString("warps." + warps + "." + "icon");
+                String iconName = Main.getInstance().warpConfig.getString("warps." + warps + "." + "icon");
                 ItemStack warpItem = new ItemStack(Material.getMaterial(iconName));
                 ItemMeta warpItemMeta = warpItem.getItemMeta();
                 warpItemMeta.setDisplayName(String.valueOf(warps));
@@ -76,8 +106,8 @@ public class warpInventory {
         Inventory inventory = Bukkit.getServer().createInventory(null, 9, "Warps " + ChatColor.RED + "[Delete]");
         int count = 0;
 
-        if (mainClass.getInstance().warpConfig.contains("warps")) {
-            Set<String> warpList = mainClass.getInstance().warpConfig.getConfigurationSection("warps").getKeys(false);
+        if (Main.getInstance().warpConfig.contains("warps")) {
+            Set<String> warpList = Main.getInstance().warpConfig.getConfigurationSection("warps").getKeys(false);
             int rows = 1;
             if (warpList.size() > 7) {
                 for (int i = 0; i < warpList.size(); i++) {
@@ -94,7 +124,7 @@ public class warpInventory {
 
             inventory = Bukkit.getServer().createInventory(null, size, "Warps " + ChatColor.RED + "[Delete]");
             for (String warps : warpList) {
-                String iconName = mainClass.getInstance().warpConfig.getString("warps." + warps + "." + "icon");
+                String iconName = Main.getInstance().warpConfig.getString("warps." + warps + "." + "icon");
                 ItemStack warpItem = new ItemStack(Material.getMaterial(iconName));
                 ItemMeta warpItemMeta = warpItem.getItemMeta();
                 warpItemMeta.setDisplayName(String.valueOf(warps));
@@ -129,34 +159,4 @@ public class warpInventory {
         }
         return inventory;
     }
-
-    private Material[] blocks = {
-            Material.GLOWSTONE,
-            Material.MYCELIUM,
-            Material.FISHING_ROD,
-            Material.WATER_BUCKET,
-            Material.LAVA_BUCKET,
-            Material.SPRUCE_SIGN,
-            Material.ANVIL,
-            Material.MINECART,
-            Material.SAND,
-            Material.CHEST,
-            Material.CRAFTING_TABLE,
-            Material.ENCHANTING_TABLE,
-            Material.END_PORTAL_FRAME,
-            Material.JUKEBOX,
-            Material.BOOKSHELF,
-            Material.BEDROCK,
-            Material.STONE,
-            Material.ICE,
-            Material.GRASS_BLOCK,
-            Material.OAK_SAPLING,
-            Material.CACTUS,
-            Material.RED_MUSHROOM_BLOCK,
-            Material.WHEAT,
-            Material.OAK_LEAVES,
-            Material.RED_BED,
-            Material.POPPY,
-            Material.LILY_PAD
-    };
 }
