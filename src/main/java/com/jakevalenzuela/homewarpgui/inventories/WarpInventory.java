@@ -1,6 +1,6 @@
 package com.jakevalenzuela.homewarpgui.inventories;
 
-import com.jakevalenzuela.homewarpgui.Main;
+import com.jakevalenzuela.homewarpgui.HomeWarpGUI;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -47,8 +47,8 @@ public class WarpInventory {
 
         Inventory inventory = Bukkit.getServer().createInventory(null, 9, "Warps " + ChatColor.GREEN + "[Teleport]");
         int count = 0;
-        if (Main.getInstance().warpConfig.contains("warps")) {
-            Set<String> warpList = Main.getInstance().warpConfig.getConfigurationSection("warps").getKeys(false);
+        if (HomeWarpGUI.getInstance().warpConfig.contains("warps")) {
+            Set<String> warpList = HomeWarpGUI.getInstance().warpConfig.getConfigurationSection("warps").getKeys(false);
 
             int rows = 1;
             if (warpList.size() > 7) {
@@ -66,7 +66,7 @@ public class WarpInventory {
 
             inventory = Bukkit.getServer().createInventory(null, size, "Warps " + ChatColor.GREEN + "[Teleport]");
             for (String warps : warpList) {
-                String iconName = Main.getInstance().warpConfig.getString("warps." + warps + "." + "icon");
+                String iconName = HomeWarpGUI.getInstance().warpConfig.getString("warps." + warps + "." + "icon");
                 ItemStack warpItem = new ItemStack(Material.getMaterial(iconName));
                 ItemMeta warpItemMeta = warpItem.getItemMeta();
                 warpItemMeta.setDisplayName(String.valueOf(warps));
@@ -106,8 +106,8 @@ public class WarpInventory {
         Inventory inventory = Bukkit.getServer().createInventory(null, 9, "Warps " + ChatColor.RED + "[Delete]");
         int count = 0;
 
-        if (Main.getInstance().warpConfig.contains("warps")) {
-            Set<String> warpList = Main.getInstance().warpConfig.getConfigurationSection("warps").getKeys(false);
+        if (HomeWarpGUI.getInstance().warpConfig.contains("warps")) {
+            Set<String> warpList = HomeWarpGUI.getInstance().warpConfig.getConfigurationSection("warps").getKeys(false);
             int rows = 1;
             if (warpList.size() > 7) {
                 for (int i = 0; i < warpList.size(); i++) {
@@ -124,7 +124,7 @@ public class WarpInventory {
 
             inventory = Bukkit.getServer().createInventory(null, size, "Warps " + ChatColor.RED + "[Delete]");
             for (String warps : warpList) {
-                String iconName = Main.getInstance().warpConfig.getString("warps." + warps + "." + "icon");
+                String iconName = HomeWarpGUI.getInstance().warpConfig.getString("warps." + warps + "." + "icon");
                 ItemStack warpItem = new ItemStack(Material.getMaterial(iconName));
                 ItemMeta warpItemMeta = warpItem.getItemMeta();
                 warpItemMeta.setDisplayName(String.valueOf(warps));

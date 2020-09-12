@@ -1,6 +1,6 @@
 package com.jakevalenzuela.homewarpgui.inventories;
 
-import com.jakevalenzuela.homewarpgui.Main;
+import com.jakevalenzuela.homewarpgui.HomeWarpGUI;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -53,8 +53,8 @@ public class HomeInventory {
         Inventory inventory = Bukkit.getServer().createInventory(null, 9, newPlayerName + "'s Homes " + ChatColor.GREEN + "[Teleport]");
         int count = 0;
 
-        if (Main.getInstance().homeConfig.contains(player.getUniqueId().toString())) {
-            Set<String> homeList = Main.getInstance().homeConfig.getConfigurationSection(player.getUniqueId().toString()).getKeys(false);
+        if (HomeWarpGUI.getInstance().homeConfig.contains(player.getUniqueId().toString())) {
+            Set<String> homeList = HomeWarpGUI.getInstance().homeConfig.getConfigurationSection(player.getUniqueId().toString()).getKeys(false);
 
             int rows = 1;
             if (homeList.size() > 7) {
@@ -72,7 +72,7 @@ public class HomeInventory {
 
             inventory = Bukkit.getServer().createInventory(null, size, newPlayerName + "'s Homes " + ChatColor.GREEN + "[Teleport]");
             for (String homes : homeList) {
-                String iconName = Main.getInstance().homeConfig.getString(player.getUniqueId().toString() + "." + homes + "." + "icon");
+                String iconName = HomeWarpGUI.getInstance().homeConfig.getString(player.getUniqueId().toString() + "." + homes + "." + "icon");
                 ItemStack homeItem = new ItemStack(Material.getMaterial(iconName));
                 ItemMeta homeItemMeta = homeItem.getItemMeta();
                 if (homeItemMeta != null)
@@ -133,8 +133,8 @@ public class HomeInventory {
         Inventory inventory = Bukkit.getServer().createInventory(null, 9, newPlayerName + "'s Homes " + ChatColor.RED + "[Delete]");
         int count = 0;
 
-        if (Main.getInstance().homeConfig.contains(player.getUniqueId().toString())) {
-            Set<String> homeList = Main.getInstance().homeConfig.getConfigurationSection(player.getUniqueId().toString()).getKeys(false);
+        if (HomeWarpGUI.getInstance().homeConfig.contains(player.getUniqueId().toString())) {
+            Set<String> homeList = HomeWarpGUI.getInstance().homeConfig.getConfigurationSection(player.getUniqueId().toString()).getKeys(false);
             int rows = 1;
             if (homeList.size() > 7) {
                 for (int i = 0; i < homeList.size(); i++) {
@@ -151,7 +151,7 @@ public class HomeInventory {
 
             inventory = Bukkit.getServer().createInventory(null, size, newPlayerName + "'s Homes " + ChatColor.RED + "[Delete]");
             for (String homeName : homeList) {
-                String iconName = Main.getInstance().homeConfig.getString(player.getUniqueId().toString() + "." + homeName + "." + "icon");
+                String iconName = HomeWarpGUI.getInstance().homeConfig.getString(player.getUniqueId().toString() + "." + homeName + "." + "icon");
                 ItemStack homeItem = new ItemStack(Material.getMaterial(iconName));
                 ItemMeta homeItemMeta = homeItem.getItemMeta();
                 if (homeItemMeta != null)

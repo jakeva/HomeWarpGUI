@@ -4,8 +4,8 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>com.jakevalenzuela</groupId>
-    <artifactId>HomeWarpGUI</artifactId>
+    <groupId>com.jaaakee</groupId>
+    <artifactId>homewarpgui</artifactId>
     <version>1.0</version>
     <packaging>jar</packaging>
 
@@ -69,7 +69,7 @@
         <dependency>
             <groupId>com.destroystokyo.paper</groupId>
             <artifactId>paper-api</artifactId>
-            <version>1.16.2-R0.1-SNAPSHOT</version>
+            <version>1.16.3-R0.1-SNAPSHOT</version>
             <scope>provided</scope>
         </dependency>
         <!--AnvilGUI API-->

@@ -17,9 +17,9 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Set;
 
-public final class Main extends JavaPlugin {
+public final class HomeWarpGUI extends JavaPlugin {
 
-    private static Main instance;
+    private static HomeWarpGUI instance;
     public File homeDataFile, warpDataFile;
     public YamlConfiguration homeConfig, warpConfig;
     private HomeInventory homes = new HomeInventory();
@@ -28,11 +28,11 @@ public final class Main extends JavaPlugin {
     private HomeUtil utilHome = new HomeUtil();
     private WarpUtil utilWarp = new WarpUtil();
 
-    public Main() {
+    public HomeWarpGUI() {
         instance = this;
     }
 
-    public static Main getInstance() {
+    public static HomeWarpGUI getInstance() {
         return instance;
     }
 
@@ -94,7 +94,7 @@ public final class Main extends JavaPlugin {
 
             } else if (args.length >= 1) {
                 if (homeConfig.contains(player.getUniqueId().toString())) {
-                    Set<String> homeList = Main.getInstance().homeConfig.getConfigurationSection(player.getUniqueId().toString()).getKeys(false);
+                    Set<String> homeList = HomeWarpGUI.getInstance().homeConfig.getConfigurationSection(player.getUniqueId().toString()).getKeys(false);
 
                     String homeName = "";
                     for (int i = 0; i < args.length; i++) {
@@ -119,7 +119,7 @@ public final class Main extends JavaPlugin {
 
             } else if (args.length >= 1) {
                 if (warpConfig.contains("warps")) {
-                    Set<String> warpList = Main.getInstance().warpConfig.getConfigurationSection("warps").getKeys(false);
+                    Set<String> warpList = HomeWarpGUI.getInstance().warpConfig.getConfigurationSection("warps").getKeys(false);
 
                     String warpName = "";
                     for (int i = 0; i < args.length; i++) {

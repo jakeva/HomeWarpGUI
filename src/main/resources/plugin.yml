@@ -1,10 +1,9 @@
 name: HomeWarpGUI
 version: ${project.version}
-main: com.jakevalenzuela.homewarpgui.mainClass
+main: com.jaaakee.homewarpgui.HomeWarpGUI
 api-version: 1.13
 authors: [Jaaakee]
 description: Homes and Warps in a GUI
-website: www.jakevalenzuela.com
 
 commands:
   home:
