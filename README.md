@@ -1,2 +1,2 @@
 # HomeWarpGUI
-Homes and Warps GUI Plugin for Spigot
+Home and Warp GUI Plugin using the SpigotAPI
