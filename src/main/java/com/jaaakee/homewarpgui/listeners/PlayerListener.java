@@ -1,10 +1,10 @@
-package com.jakevalenzuela.homewarpgui.listeners;
+package com.jaaakee.homewarpgui.listeners;
 
-import com.jakevalenzuela.homewarpgui.HomeWarpGUI;
-import com.jakevalenzuela.homewarpgui.inventories.HomeInventory;
-import com.jakevalenzuela.homewarpgui.inventories.WarpInventory;
-import com.jakevalenzuela.homewarpgui.utilities.HomeUtil;
-import com.jakevalenzuela.homewarpgui.utilities.WarpUtil;
+import com.jaaakee.homewarpgui.HomeWarpGUI;
+import com.jaaakee.homewarpgui.inventories.HomeInventory;
+import com.jaaakee.homewarpgui.inventories.WarpInventory;
+import com.jaaakee.homewarpgui.utilities.HomeUtil;
+import com.jaaakee.homewarpgui.utilities.WarpUtil;
 import net.wesjd.anvilgui.AnvilGUI;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -15,15 +15,16 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.Inventory;
 
 import java.io.IOException;
+import java.util.Objects;
 import java.util.Set;
 
 public class PlayerListener implements Listener {
 
-    private HomeInventory homes = new HomeInventory();
-    private WarpInventory warps = new WarpInventory();
+    private final HomeInventory homes = new HomeInventory();
+    private final WarpInventory warps = new WarpInventory();
 
-    private HomeUtil UtilHome = new HomeUtil();
-    private WarpUtil UtilWarp = new WarpUtil();
+    private final HomeUtil UtilHome = new HomeUtil();
+    private final WarpUtil UtilWarp = new WarpUtil();
 
     @EventHandler
     public void onInventoryClick(InventoryClickEvent event) {
@@ -39,12 +40,12 @@ public class PlayerListener implements Listener {
 
         int homeCount = 0;
         if (HomeWarpGUI.getInstance().homeConfig.contains(player.getUniqueId().toString())) {
-            homeCount = HomeWarpGUI.getInstance().homeConfig.getConfigurationSection(player.getUniqueId().toString()).getKeys(false).size();
+            homeCount = Objects.requireNonNull(HomeWarpGUI.getInstance().homeConfig.getConfigurationSection(player.getUniqueId().toString())).getKeys(false).size();
         }
 
         int warpCount = 0;
         if (HomeWarpGUI.getInstance().warpConfig.contains("warps")) {
-            warpCount = HomeWarpGUI.getInstance().warpConfig.getConfigurationSection("warps").getKeys(false).size();
+            warpCount = Objects.requireNonNull(HomeWarpGUI.getInstance().warpConfig.getConfigurationSection("warps")).getKeys(false).size();
         }
 
         if (event.getView().getTitle().equals(cutPlayerName + "'s Homes " + ChatColor.GREEN + "[Teleport]")) {
@@ -64,8 +65,8 @@ public class PlayerListener implements Listener {
                     player.openInventory(homes.deleteHomeInventory(player));
 
                 } else if (slotNum >= 0 && slotNum <= homeCount && inventory.getItem(slotNum) != null) {
-                    player.teleport(UtilHome.getHome(player, inventory.getItem(slotNum).getItemMeta().getDisplayName()));
-                    player.sendMessage(ChatColor.GREEN + "You have arrived at '" + inventory.getItem(slotNum).getItemMeta().getDisplayName() + "'!");
+                    player.teleport(UtilHome.getHome(player, Objects.requireNonNull(inventory.getItem(slotNum)).getItemMeta().getDisplayName()));
+                    player.sendMessage(ChatColor.GREEN + "You have arrived at '" + Objects.requireNonNull(inventory.getItem(slotNum)).getItemMeta().getDisplayName() + "'!");
                 }
             }
 
@@ -77,14 +78,14 @@ public class PlayerListener implements Listener {
             } else if ((slotNum >= 0) && (slotNum <= homeCount)) {
                 if (inventory.getItem(slotNum) != null) {
 
-                    String homeName = inventory.getItem(slotNum).getItemMeta().getDisplayName();
+                    String homeName = Objects.requireNonNull(inventory.getItem(slotNum)).getItemMeta().getDisplayName();
                     if (HomeWarpGUI.getInstance().homeConfig.contains(player.getUniqueId() + "." + homeName)) {
                         HomeWarpGUI.getInstance().homeConfig.set(player.getUniqueId() + "." + homeName, null);
                         player.sendMessage(ChatColor.GREEN + "Home '" + homeName + "' Deleted!");
                     }
 
                     if (HomeWarpGUI.getInstance().homeConfig.contains(player.getUniqueId().toString())) {
-                        Set<String> homeList = HomeWarpGUI.getInstance().homeConfig.getConfigurationSection(player.getUniqueId().toString()).getKeys(false);
+                        Set<String> homeList = Objects.requireNonNull(HomeWarpGUI.getInstance().homeConfig.getConfigurationSection(player.getUniqueId().toString())).getKeys(false);
                         if (homeList.size() == 0) {
                             HomeWarpGUI.getInstance().homeConfig.set(player.getUniqueId().toString(), null);
                         }
@@ -99,9 +100,9 @@ public class PlayerListener implements Listener {
             player.closeInventory();
             player.updateInventory();
 
-            String homeName = inventory.getItem(slotNum).getItemMeta().getDisplayName();
+            String homeName = Objects.requireNonNull(inventory.getItem(slotNum)).getItemMeta().getDisplayName();
             if (HomeWarpGUI.getInstance().homeConfig.contains(player.getUniqueId().toString())) {
-                Set<String> homelist = HomeWarpGUI.getInstance().homeConfig.getConfigurationSection(player.getUniqueId().toString()).getKeys(false);
+                Set<String> homelist = Objects.requireNonNull(HomeWarpGUI.getInstance().homeConfig.getConfigurationSection(player.getUniqueId().toString())).getKeys(false);
 
                 int homeLimit = 0;
                 for (int i = 1; i <= 52; i++) {
@@ -115,13 +116,13 @@ public class PlayerListener implements Listener {
                 }
 
                 if (homelist.size() < homeLimit) {
-                    UtilHome.setHome(player, homeName, inventory.getItem(slotNum).getType().name()); /* Create Home */
+                    UtilHome.setHome(player, homeName, Objects.requireNonNull(inventory.getItem(slotNum)).getType().name()); /* Create Home */
                     player.sendMessage(ChatColor.GREEN + "Home '" + homeName + "' Created!");
                 } else {
                     player.sendMessage(ChatColor.RED + "You have reached your allowed maximum of houses!"); /* Player has reached max amount of houses (set through permissions) */
                 }
             } else {
-                UtilHome.setHome(player, homeName, inventory.getItem(slotNum).getType().name()); /* Create Home */
+                UtilHome.setHome(player, homeName, Objects.requireNonNull(inventory.getItem(slotNum)).getType().name()); /* Create Home */
                 player.sendMessage(ChatColor.GREEN + "Home '" + homeName + "' Created!");
             }
 
@@ -141,8 +142,8 @@ public class PlayerListener implements Listener {
                     player.openInventory(warps.deleteWarpInventory(player));
 
                 } else if (slotNum >= 0 && slotNum <= warpCount && inventory.getItem(slotNum) != null) {
-                    player.teleport(UtilWarp.getWarp(player, inventory.getItem(slotNum).getItemMeta().getDisplayName()));
-                    player.sendMessage(ChatColor.GREEN + "You have arrived at '" + inventory.getItem(slotNum).getItemMeta().getDisplayName() + "'!");
+                    player.teleport(UtilWarp.getWarp(player, Objects.requireNonNull(inventory.getItem(slotNum)).getItemMeta().getDisplayName()));
+                    player.sendMessage(ChatColor.GREEN + "You have arrived at '" + Objects.requireNonNull(inventory.getItem(slotNum)).getItemMeta().getDisplayName() + "'!");
                 }
             }
 
@@ -154,14 +155,14 @@ public class PlayerListener implements Listener {
             } else if (slotNum >= 0 && slotNum <= warpCount) {
                 if (inventory.getItem(slotNum) != null) {
 
-                    String warpName = inventory.getItem(slotNum).getItemMeta().getDisplayName();
+                    String warpName = Objects.requireNonNull(inventory.getItem(slotNum)).getItemMeta().getDisplayName();
                     if (HomeWarpGUI.getInstance().warpConfig.contains("warps." + warpName)) {
                         HomeWarpGUI.getInstance().warpConfig.set("warps." + warpName, null);
                         player.sendMessage(ChatColor.GREEN + "Warp '" + warpName + "' Deleted!");
                     }
 
                     if (HomeWarpGUI.getInstance().warpConfig.contains("warps")) {
-                        Set<String> warpList = HomeWarpGUI.getInstance().warpConfig.getConfigurationSection("warps").getKeys(false);
+                        Set<String> warpList = Objects.requireNonNull(HomeWarpGUI.getInstance().warpConfig.getConfigurationSection("warps")).getKeys(false);
                         if (warpList.size() == 0) {
                             HomeWarpGUI.getInstance().warpConfig.set("warps", null);
                         }
@@ -175,8 +176,8 @@ public class PlayerListener implements Listener {
             player.closeInventory();
             player.updateInventory();
 
-            UtilWarp.setWarp(player, inventory.getItem(slotNum).getItemMeta().getDisplayName(), inventory.getItem(slotNum).getType().toString());
-            player.sendMessage(ChatColor.GREEN + "Warp '" + inventory.getItem(slotNum).getItemMeta().getDisplayName() + "' Created!");
+            UtilWarp.setWarp(player, Objects.requireNonNull(inventory.getItem(slotNum)).getItemMeta().getDisplayName(), inventory.getItem(slotNum).getType().toString());
+            player.sendMessage(ChatColor.GREEN + "Warp '" + Objects.requireNonNull(inventory.getItem(slotNum)).getItemMeta().getDisplayName() + "' Created!");
         }
 
         try {

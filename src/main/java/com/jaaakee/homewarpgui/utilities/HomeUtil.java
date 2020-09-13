@@ -1,6 +1,6 @@
-package com.jakevalenzuela.homewarpgui.utilities;
+package com.jaaakee.homewarpgui.utilities;
 
-import com.jakevalenzuela.homewarpgui.HomeWarpGUI;
+import com.jaaakee.homewarpgui.HomeWarpGUI;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
@@ -26,7 +26,6 @@ public class HomeUtil {
         float yaw = HomeWarpGUI.getInstance().homeConfig.getInt(player.getUniqueId() + "." + homeName + "." + "yaw");
         String worldName = HomeWarpGUI.getInstance().homeConfig.getString(player.getUniqueId() + "." + homeName + "." + "world");
         World world = Bukkit.getWorld(worldName);
-        final Location location = new Location(world, x, y, z, yaw, pitch);
-        return location;
+        return new Location(world, x, y, z, yaw, pitch);
     }
 }

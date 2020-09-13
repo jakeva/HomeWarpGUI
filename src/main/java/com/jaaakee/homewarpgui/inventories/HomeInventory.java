@@ -1,6 +1,6 @@
-package com.jakevalenzuela.homewarpgui.inventories;
+package com.jaaakee.homewarpgui.inventories;
 
-import com.jakevalenzuela.homewarpgui.HomeWarpGUI;
+import com.jaaakee.homewarpgui.HomeWarpGUI;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -9,6 +9,7 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
+import java.util.Objects;
 import java.util.Set;
 
 public class HomeInventory {
@@ -54,7 +55,7 @@ public class HomeInventory {
         int count = 0;
 
         if (HomeWarpGUI.getInstance().homeConfig.contains(player.getUniqueId().toString())) {
-            Set<String> homeList = HomeWarpGUI.getInstance().homeConfig.getConfigurationSection(player.getUniqueId().toString()).getKeys(false);
+            Set<String> homeList = Objects.requireNonNull(HomeWarpGUI.getInstance().homeConfig.getConfigurationSection(player.getUniqueId().toString())).getKeys(false);
 
             int rows = 1;
             if (homeList.size() > 7) {
@@ -73,7 +74,7 @@ public class HomeInventory {
             inventory = Bukkit.getServer().createInventory(null, size, newPlayerName + "'s Homes " + ChatColor.GREEN + "[Teleport]");
             for (String homes : homeList) {
                 String iconName = HomeWarpGUI.getInstance().homeConfig.getString(player.getUniqueId().toString() + "." + homes + "." + "icon");
-                ItemStack homeItem = new ItemStack(Material.getMaterial(iconName));
+                ItemStack homeItem = new ItemStack(Objects.requireNonNull(Material.getMaterial(iconName)));
                 ItemMeta homeItemMeta = homeItem.getItemMeta();
                 if (homeItemMeta != null)
                     homeItemMeta.setDisplayName(String.valueOf(homes));
@@ -134,7 +135,7 @@ public class HomeInventory {
         int count = 0;
 
         if (HomeWarpGUI.getInstance().homeConfig.contains(player.getUniqueId().toString())) {
-            Set<String> homeList = HomeWarpGUI.getInstance().homeConfig.getConfigurationSection(player.getUniqueId().toString()).getKeys(false);
+            Set<String> homeList = Objects.requireNonNull(HomeWarpGUI.getInstance().homeConfig.getConfigurationSection(player.getUniqueId().toString())).getKeys(false);
             int rows = 1;
             if (homeList.size() > 7) {
                 for (int i = 0; i < homeList.size(); i++) {

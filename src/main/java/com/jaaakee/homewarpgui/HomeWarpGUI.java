@@ -1,10 +1,10 @@
-package com.jakevalenzuela.homewarpgui;
+package com.jaaakee.homewarpgui;
 
-import com.jakevalenzuela.homewarpgui.inventories.HomeInventory;
-import com.jakevalenzuela.homewarpgui.inventories.WarpInventory;
-import com.jakevalenzuela.homewarpgui.listeners.PlayerListener;
-import com.jakevalenzuela.homewarpgui.utilities.HomeUtil;
-import com.jakevalenzuela.homewarpgui.utilities.WarpUtil;
+import com.jaaakee.homewarpgui.inventories.HomeInventory;
+import com.jaaakee.homewarpgui.inventories.WarpInventory;
+import com.jaaakee.homewarpgui.listeners.PlayerListener;
+import com.jaaakee.homewarpgui.utilities.HomeUtil;
+import com.jaaakee.homewarpgui.utilities.WarpUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
@@ -15,18 +15,18 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.Set;
+import java.util.Objects;
 
 public final class HomeWarpGUI extends JavaPlugin {
 
     private static HomeWarpGUI instance;
     public File homeDataFile, warpDataFile;
     public YamlConfiguration homeConfig, warpConfig;
-    private HomeInventory homes = new HomeInventory();
-    private WarpInventory warps = new WarpInventory();
+    private final HomeInventory homes = new HomeInventory();
+    private final WarpInventory warps = new WarpInventory();
 
-    private HomeUtil utilHome = new HomeUtil();
-    private WarpUtil utilWarp = new WarpUtil();
+    private final HomeUtil utilHome = new HomeUtil();
+    private final WarpUtil utilWarp = new WarpUtil();
 
     public HomeWarpGUI() {
         instance = this;
@@ -92,18 +92,17 @@ public final class HomeWarpGUI extends JavaPlugin {
             if (args.length == 0) {
                 player.openInventory(homes.createHomeInventory(player));
 
-            } else if (args.length >= 1) {
+            } else {
                 if (homeConfig.contains(player.getUniqueId().toString())) {
-                    Set<String> homeList = HomeWarpGUI.getInstance().homeConfig.getConfigurationSection(player.getUniqueId().toString()).getKeys(false);
 
-                    String homeName = "";
-                    for (int i = 0; i < args.length; i++) {
-                        homeName += args[i] + " ";
+                    StringBuilder homeName = new StringBuilder();
+                    for (String arg : args) {
+                        homeName.append(arg).append(" ");
                     }
-                    homeName = homeName.trim();
+                    homeName = new StringBuilder(homeName.toString().trim());
 
-                    if (homeConfig.getConfigurationSection(player.getUniqueId().toString()).contains(homeName)) {
-                        player.teleport(utilHome.getHome(player, homeName));
+                    if (Objects.requireNonNull(homeConfig.getConfigurationSection(player.getUniqueId().toString())).contains(homeName.toString())) {
+                        player.teleport(utilHome.getHome(player, homeName.toString()));
                         player.sendMessage(ChatColor.GREEN + "You have arrived at '" + homeName + "'!");
                     } else {
                         player.sendMessage(ChatColor.RED + "Invalid home name. /home <name>");
@@ -117,18 +116,16 @@ public final class HomeWarpGUI extends JavaPlugin {
             if (args.length == 0) {
                 player.openInventory(warps.createWarpInventory(player));
 
-            } else if (args.length >= 1) {
+            } else {
                 if (warpConfig.contains("warps")) {
-                    Set<String> warpList = HomeWarpGUI.getInstance().warpConfig.getConfigurationSection("warps").getKeys(false);
-
-                    String warpName = "";
-                    for (int i = 0; i < args.length; i++) {
-                        warpName += args[i] + " ";
+                    StringBuilder warpName = new StringBuilder();
+                    for (String arg : args) {
+                        warpName.append(arg).append(" ");
                     }
-                    warpName = warpName.trim();
+                    warpName = new StringBuilder(warpName.toString().trim());
 
-                    if (warpConfig.getConfigurationSection("warps").contains(warpName)) {
-                        player.teleport(utilWarp.getWarp(player, warpName));
+                    if (Objects.requireNonNull(warpConfig.getConfigurationSection("warps")).contains(warpName.toString())) {
+                        player.teleport(utilWarp.getWarp(player, warpName.toString()));
                         player.sendMessage(ChatColor.GREEN + "You have arrived at '" + warpName + "'!");
                     } else {
                         player.sendMessage(ChatColor.RED + "Invalid warp name. /warp <name>");

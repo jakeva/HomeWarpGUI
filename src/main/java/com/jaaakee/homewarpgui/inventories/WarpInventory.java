@@ -1,6 +1,6 @@
-package com.jakevalenzuela.homewarpgui.inventories;
+package com.jaaakee.homewarpgui.inventories;
 
-import com.jakevalenzuela.homewarpgui.HomeWarpGUI;
+import com.jaaakee.homewarpgui.HomeWarpGUI;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
