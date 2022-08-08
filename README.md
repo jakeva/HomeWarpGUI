@@ -1,2 +1,2 @@
 # HomeWarpGUI
-Home and Warp GUI Plugin using Paper.
+Home and Warp GUI Plugin Java Minecraft Server Plugin
